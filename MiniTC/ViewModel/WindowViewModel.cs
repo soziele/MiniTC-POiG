@@ -42,6 +42,7 @@ namespace MiniTC.ViewModel
                             try
                             {
                                 File.Copy(@source, @destination);
+                                Right.ShowDirectoryContent();
                             }
                             catch (Exception e)
                             {
