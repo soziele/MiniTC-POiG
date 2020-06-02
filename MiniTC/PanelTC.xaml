@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MiniTC"
              
-        xmlns:i="clr-namespace:Microsoft.Xaml.Behaviors;assembly=Microsoft.Xaml.Behaviors"
+        
              
         mc:Ignorable="d"
         Height="400" Width="250">
@@ -27,8 +27,8 @@
         <Label Content="{Binding PathLabel, Source={StaticResource ResourceKey=StringResources}}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <Label Content="{Binding DriveLabel, Source={StaticResource ResourceKey=StringResources}}" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <TextBox Text="{Binding CurrentPath,Mode=OneWay}" IsEnabled="False" FontSize="18" Grid.Column="1" Grid.ColumnSpan="3" Margin="5,10,5,10" />
-        <ComboBox SelectedValue="{Binding SelectedDrive}" ItemsSource="{Binding DrivesList}" Grid.Row="1" Grid.Column="3" Margin="5,10,5,10" />
-        <ListView ItemsSource="{Binding ContentList}" SelectedItem="{Binding SelectedItem}" Grid.Row="2" Grid.ColumnSpan="4" Margin="5,10,5,10"/>
+        <ComboBox SelectedValue="{Binding SelectedDrive}" ItemsSource="{Binding DrivesList,Mode=OneWay}" Grid.Row="1" Grid.Column="3" Margin="5,10,5,10" />
+        <ListView ItemsSource="{Binding ContentList}" SelectedItem="{Binding SelectedItem,Delay=1}" Grid.Row="2" Grid.ColumnSpan="4" Margin="5,10,5,10"/>
 
     </Grid>
 </UserControl>

@@ -27,7 +27,7 @@ namespace MiniTC.ViewModel
             this.currentPath = "";
             this.contentList = new List<string>();
             this.selectedDrive = "";
-            this.selectedItem = "";
+            this.selectedItem = null;
         }
 
         public List<string> DrivesList
@@ -82,29 +82,6 @@ namespace MiniTC.ViewModel
             }
         }
 
-        #region commands
-
-        /*private ICommand guide=null;
-
-        public ICommand Guide
-        {
-            get
-            {
-                if (guide == null)
-                {
-                    guide = new RelayCommand(
-                        arg =>
-                        {
-                            Guiding();
-                        },
-                        arg => true
-                        );
-                }
-                return guide;
-            }
-        }*/
- 
-
         public void Guiding()
         {
             if (string.IsNullOrEmpty(SelectedItem))
@@ -113,13 +90,14 @@ namespace MiniTC.ViewModel
             }
             else if (SelectedItem.Contains(Resources.DirectorySign))
             {
-                this.CurrentPath = SelectedItem.Substring(3);
+                this.CurrentPath = selectedItem.Substring(3);
+                this.selectedItem=null;
                 ShowDirectoryContent();
             }
             else if (SelectedItem == Resources.GoBack)
             {
-                string removed = this.CurrentPath.Substring(CurrentPath.LastIndexOf(Path.DirectorySeparatorChar)+1);
-                this.CurrentPath=this.CurrentPath.TrimEnd(removed.ToCharArray());
+                CurrentPath = Directory.GetParent(currentPath).ToString();
+                this.selectedItem = null;
                 ShowDirectoryContent();
             }
             else this.CurrentPath = SelectedItem;
@@ -128,21 +106,31 @@ namespace MiniTC.ViewModel
 
         public void ShowDirectoryContent()
         {
-            currentPanel.CurrentPath = this.CurrentPath;
-            currentPanel.UpdateContent();
-            this.ContentList=currentPanel.Content;
+            try
+            {
+                currentPanel.UpdateContent(CurrentPath);
+            }
+            catch(UnauthorizedAccessException)
+            {
+                MessageBox.Show("Brak dostępu do ścieżki!");
+                this.SelectedItem = null;
+            }
 
             bool root = false;
             foreach(var drive in DrivesList)
             {
-                if (this.CurrentPath == drive) root = true;
+                if (this.currentPath == drive) root = true;
             }
-            if(!root) this.ContentList.Insert(0, Resources.GoBack);
-            this.OnPropertyChanged();
+            if (!root)
+            {
+                List<string> tmp = currentPanel.Content;
+                tmp.Insert(0, Resources.GoBack);
+                this.ContentList = tmp;
+                this.SelectedItem = null;
+            }
+            else this.ContentList = currentPanel.Content;
         }
 
-
-        #endregion
 
     }
 

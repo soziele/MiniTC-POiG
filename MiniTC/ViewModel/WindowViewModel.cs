@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.IO;
+using System.Windows;
 
 
 namespace MiniTC.ViewModel
@@ -34,9 +35,18 @@ namespace MiniTC.ViewModel
                         {
                             string item = Left.SelectedItem.Substring(Left.SelectedItem.LastIndexOf(Path.DirectorySeparatorChar));
                             string source = Left.SelectedItem;
-                            string dest = Right.CurrentPath.Remove(Right.CurrentPath.LastIndexOf(Path.DirectorySeparatorChar) + 1);
+                            string dest = "";
+                            if (!string.IsNullOrEmpty(Right.SelectedItem)) dest = Right.CurrentPath.Remove(Right.CurrentPath.LastIndexOf(Path.DirectorySeparatorChar) + 1);
+                            else dest = Right.CurrentPath;
                             string destination = dest + item;
-                            File.Copy(@source, @destination);
+                            try
+                            {
+                                File.Copy(@source, @destination);
+                            }
+                            catch (Exception e)
+                            {
+                                MessageBox.Show("Błąd kopiowania! "+e.Message);
+                            }
                         },
                         arg => !string.IsNullOrEmpty(Left.SelectedItem) && !Left.SelectedItem.Contains("<D>") && !string.IsNullOrEmpty(Right.SelectedDrive)
                         );

@@ -11,14 +11,12 @@ namespace MiniTC.Model
     class Panel
     {
         public List<string> Drives { get; set; }
-        public string CurrentPath { get; set; }
         public List<string> Content { get; set; }
 
         public Panel()
         {
             UpdateDrives();
             Content = new List<string>();
-            CurrentPath = "";
         }
 
         public void UpdateDrives()
@@ -26,7 +24,7 @@ namespace MiniTC.Model
             this.Drives = Directory.GetLogicalDrives().ToList<string>();
         }
 
-        public void UpdateContent()
+        public void UpdateContent(string CurrentPath)
         {
  
             List<string> directories = new List<string>();
@@ -38,9 +36,8 @@ namespace MiniTC.Model
                     directories[i] = directories[i].Insert(0, Resources.DirectorySign);
                 }
             files = (Directory.GetFiles(CurrentPath).ToList<string>());
-            directories.AddRange(files);
             Content = directories;
-                //Content.AddRange(files);
+            Content.AddRange(files);
         }
 
 
